@@ -21,7 +21,15 @@ function generateArt() {
     }
 }
 
+function regenerateArt() {
+    canvas.innerHTML = '';
+    generateArt();
+}
+
 const canvas = document.querySelector('#canvas');
+const regenerateButton = document.querySelector('#regenerate');
 const colors = ['#FFBE0B', '#FB5607', '#FF006E', '#8338EC', '#3A86FF'];
 
 generateArt();
+
+regenerateButton.addEventListener('click', regenerateArt);
