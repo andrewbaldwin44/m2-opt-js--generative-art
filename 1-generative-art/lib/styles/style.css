@@ -1,4 +1,5 @@
 @import url('reset.css');
+@import url('slider.css');
 
 body {
     font-family: 'Poiret One', cursive;;
@@ -36,4 +37,21 @@ body {
 
 .regenerate:hover {
     opacity: 1;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    border: 5px solid white;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 800;
+    width: 60%;
+    min-height: 8%;
+    max-height: 15%;
+    /* background-color: white; */
 }

@@ -24,6 +24,48 @@ function generateArt() {
     }
 }
 
+function updateArt(e) {
+
+    const rangeIndex = rangeSliders.indexOf(e.target);
+    const previousRangeValue = previousRangeValues[rangeIndex];
+    const currentRangeValue = parseInt(e.target.value);
+
+    const valueChange = currentRangeValue - previousRangeValue;
+
+    previousRangeValues[rangeIndex] = currentRangeValue;
+
+    [...canvas.children].forEach(div => {
+        let attribute = e.target.id.split('-')[0];
+        let newAttribute = undefined;
+        
+        if (attribute == 'rotation' || attribute == 'skew') {
+            const previousTransform = div.style.transform.split(' ');
+            const previousRotate = previousTransform[0];
+            const previousSkew = previousTransform[1];
+
+            if (attribute == 'rotation') {
+                const previousRotationValue = previousRotate.replace(/[\D]/g, '');
+                
+                const newValue = Number(previousRotationValue) + valueChange;
+                newAttribute = `rotate(${newValue}deg) ${previousSkew}`;
+            }
+            else {
+                const previousSkewValue = previousRotate.replace(/[\D]/g, '');
+                const newValue = Number(previousSkewValue) + valueChange;
+                newAttribute = `${previousRotate} skew(${newValue}rad)`;
+            }
+            attribute = 'transform';            
+        }  else {
+            const currentDivValue = parseInt(div.style[attribute]);
+            const newValue = `${currentDivValue + valueChange}`;
+
+            newAttribute = `${newValue}%`;
+        }
+        
+        div.style[attribute] = newAttribute;
+    });
+}
+
 function regenerateArt() {
     canvas.innerHTML = '';
     generateArt();
@@ -37,6 +79,15 @@ const blendModes = ['normal', 'multiply', 'screen', 'overlay', 'darken',
                     'soft-light', 'difference', 'exclusion', 'hue',
                     'saturation', 'color', 'luminosity'];
 
+const controls = document.querySelector('#controls');
+const rangeSliders = [...controls.children];
+const previousRangeValues = Array.from(Array(rangeSliders.length)).map(() => 0);
+
 generateArt();
 
 regenerateButton.addEventListener('click', regenerateArt);
+
+rangeSliders.forEach(range => {
+    
+    range.addEventListener('change', updateArt);
+});
